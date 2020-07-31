@@ -47,7 +47,7 @@
 						Orientation="Vertical">
 						<TextBlock
 							TextWrapping="WrapWithOverflow">
-						General options and quality of life enhancements.
+                            General options and quality of life enhancements.
 						</TextBlock>
 					</StackPanel>
 					<StackPanel

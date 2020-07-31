@@ -1,15 +1,25 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Media;
+using Buddy.Coroutines;
+using Clio.Utilities;
+using Common.Logging;
 using ff14bot;
 using ff14bot.Behavior;
+using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
+using ff14bot.Overlay3D;
 using ff14bot.Pathing;
+using ff14bot.RemoteWindows;
 using Kombatant.Enums;
 using Kombatant.Extensions;
 using Kombatant.Helpers;
 using Kombatant.Interfaces;
+using LogLevel = ff14bot.Helpers.LogLevel;
 
 namespace Kombatant.Logic
 {
@@ -27,14 +37,17 @@ namespace Kombatant.Logic
         #endregion
 
         private const float MaxDistance = 7.5f;
+        private float MaxFlyDisTance = (float)(new Random().Next(15,40));
         private const float MoveToDistance = 7f;
-
+        private Timer timer =new Timer();
         /// <summary>
         /// Main task executor for the Movement logic.
         /// </summary>
         /// <returns>Returns <c>true</c> if any action was executed, otherwise <c>false</c>.</returns>
         internal new async Task<bool> ExecuteLogic()
         {
+
+
             if (Settings.BotBase.Instance.IsPaused)
                 return await Task.FromResult(false);
 
@@ -95,13 +108,16 @@ namespace Kombatant.Logic
             if (Core.Me.InCombat && !Core.Me.IsMounted)
                 return await Task.FromResult(false);
 
+
             if (await PerformFlightTakeOff(characterToFollow))
                 return await Task.FromResult(true);
 
-            // Party leader too far away, auto move closer to them.
+
             if (characterToFollow.Distance2D() > MaxDistance)
+            {
                 if (await PerformNavigation(characterToFollow))
                     return await Task.FromResult(true);
+            }
 
             Navigator.PlayerMover.MoveStop();
 
@@ -143,8 +159,13 @@ namespace Kombatant.Logic
             if (!PartyManager.PartyLeader.IsInObjectManager)
                 return await Task.FromResult(false);
 
-            var partyLeader = PartyManager.PartyLeader.BattleCharacter;
 
+            if (SelectYesno.IsOpen)
+            {
+                SelectYesno.ClickYes();
+            }
+            var partyLeader = PartyManager.PartyLeader.BattleCharacter;
+            
             return await PerformFollowLogic(partyLeader);
         }
 
@@ -173,6 +194,7 @@ namespace Kombatant.Logic
         /// <returns></returns>
         private async Task<bool> PerformFlightTakeOff(Character obj)
         {
+            
             if (obj.Location.Y >= Core.Me.Location.Y + 5 && !MovementManager.IsFlying)
             {
                 await CommonTasks.TakeOff();
@@ -194,16 +216,27 @@ namespace Kombatant.Logic
                 Navigator.PlayerMover.MoveTowards(obj.Location);
                 return await Task.FromResult(true);
             }
-
+            Random random = new Random();
+            Vector3 walkoffset = new Vector3(random.Next(3,10), random.Next(0,2), random.Next(3,10));
             if (Settings.BotBase.Instance.WaypointGenerationMode == WaypointGenerationMode.NavGraph)
             {
+
                 if (!MovementManager.IsFlying && !MovementManager.IsDiving)
+                {
+
                     await CommonBehaviors.MoveAndStop(
-                        r => obj.Location, r => MoveToDistance, true,
-                        "Following selected target")
+                            r => obj.Location - walkoffset, r => MoveToDistance, true,
+                            "Following selected target")
                         .ExecuteCoroutine();
+                }
                 else
-                    Flightor.MoveTo(obj.Location);
+                {
+                    if (obj.Distance2D() > MaxFlyDisTance) {
+                        Flightor.MoveTo(obj.Location);
+                    }
+                }
+
+    
 
                 return await Task.FromResult(true);
             }
@@ -243,6 +276,7 @@ namespace Kombatant.Logic
                     LogHelper.Instance.Log(
                         "[{0}] Mounting...",
                         CallStackHelper.Instance.GetCaller());
+                    await Coroutine.Sleep(new Random().Next(2,5)*1000);
                     await CommonTasks.MountUp();
                     return await Task.FromResult(true);
                 }

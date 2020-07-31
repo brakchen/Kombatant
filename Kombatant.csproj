@@ -90,13 +90,13 @@
     <Compile Include="Settings\Models\TargetObject.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="GreyMagic, Version=1.0.41.0, Culture=neutral, PublicKeyToken=260525fa2b0e778a">
-      <HintPath>..\..\..\Dev_RebornBuddy64Beta\GreyMagic.dll</HintPath>
+    <Reference Include="GreyMagic">
+      <HintPath>..\..\..\Desktop\RebornbuddyCN 1.0.403.0\GreyMagic.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="RebornBuddy, Version=1.0.181.0, Culture=neutral, PublicKeyToken=48d7174f8a943034">
-      <HintPath>..\..\..\Dev_RebornBuddy64Beta\RebornBuddy.exe</HintPath>
+    <Reference Include="RebornBuddy">
+      <HintPath>..\..\..\Desktop\RebornbuddyCN 1.0.403.0\RebornBuddy.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -113,6 +113,7 @@
       <DependentUpon>ClassicSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Controls.resx" />
+    <EmbeddedResource Include="Resources\Localization_bak.resx" />
     <EmbeddedResource Include="Resources\Localization.resx" />
   </ItemGroup>
   <ItemGroup>
@@ -135,7 +136,7 @@
     <Content Include="Resources\Image\Khloe.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Documentation" />
+    <Folder Include="Resources\Documentation\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Image\Kombatant.ico" />

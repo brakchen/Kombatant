@@ -7,29 +7,29 @@ namespace Kombatant.Enums
     /// </summary>
     public enum TargetingMode
     {
-        [Description("No auto target selection")]
+        [Description("不自动选择敌人")]
         None = 0,
-        [Description("Nearest enemy")]
+        [Description("最近的敌人")]
         Nearest = 10,
-        [Description("Assist party leader")]
+        [Description("跟队长选择目标")]
         AssistLeader = 20,
-        [Description("Assist tank")]
+        [Description("跟坦克选择目标")]
         AssistTank = 30,
-        [Description("Highest level character")]
+        [Description("跟最高等级的队员选择目标")]
         AssistHighestLvl = 40,
-        [Description("Best AoE target")]
+        [Description("跟AoE选择目标")]
         BestAoE = 50,
-        [Description("Whitelisted enemies")]
+        [Description("选择白名单内的敌人")]
         OnlyWhitelisted = 60,
-        [Description("Assist fixed character")]
+        [Description("跟选定的角色选择目标")]
         AssistFixedCharacter = 70,
-        [Description("Lowest health")]
+        [Description("血量最低的敌人")]
         LowestHealth = 100,
-        [Description("Lowest health percent")]
+        [Description("血量最低百分比的敌人")]
         LowestHealthPercent = 110,
-        [Description("Highest health")]
+        [Description("血量最高的敌人")]
         HighestHealth = 120,
-        [Description("Highest health percent")]
+        [Description("血量最高百分比的敌人")]
         HighestHealthPercent = 130,
     }
 }
